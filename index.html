@@ -1,10 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Welcome to Cyber Gvs</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cyber Gvs App</title>
+  <link rel="manifest" href="manifest.json">
 </head>
 <body>
-  <h1>Hello from Cyber Gvs!</h1>
-  <p>This is your GitHub Pages site.</p>
+  <h1>Cyber Gvs Web App</h1>
+  <p>Install our PWA on your phone.</p>
+  <button onclick="installApp()">Install App</button>
+
+  <script>
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+    });
+
+    function installApp() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(choiceResult => {
+          deferredPrompt = null;
+        });
+      }
+    }
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(() => console.log('Service Worker Registered'));
+    }
+  </script>
 </body>
 </html>
